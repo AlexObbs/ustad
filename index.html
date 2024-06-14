@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dangers of the World!</title>
+    <link rel="icon" type="image/x-icon" href="images.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 460px;
+        }
+
+        .numbered-icon .signpost {
+            background-color: orange;
+            border: 2px solid black;
+            padding: 5px 10px;
+            border-radius: 5px;
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .numbered-icon .signpost:before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 10px 5px 0;
+            border-style: solid;
+            border-color: black transparent transparent;
+            display: block;
+            width: 0;
+        }
+    </style>
+</head>
+
+<body style="background-color: orange;">
+    <header style="height: 50px;">
+        <h1 style="color: brown; text-align: center;">AROUND THE WORLD IN 80 DANGERS</h1>
+    </header>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map', { worldCopyJump: true }).setView([20, 0], 2);
+
+        // Replace 'YOUR_MAPBOX_ACCESS_TOKEN' with your actual Mapbox access token
+        L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib2JieWJsYXEiLCJhIjoiY2x3dDQyaXgzMDI2ZzJpcjFwa2VneW1xMSJ9.OW3xBMYEURvFl7z4hHGuJA', {
+            maxZoom: 18,
+            attribution: '© Mapbox © OpenStreetMap'
+        }).addTo(map);
+
+        var locations = [
+            { name: "Skeleton Coast", coords: [-21.6073, 14.5373], article: "https://en.wikipedia.org/wiki/Skeleton_Coast", alex: 'Skeleton Coast' },
+            { name: "Crocodile", coords: [-6.2556, 29.5108], article: "https://en.wikipedia.org/wiki/Gustave_(crocodile)", alex: "Gustave" },
+            { name: "Sinkholes", coords: [33.7505, 109.4701], article: "https://en.wikipedia.org/wiki/Xiaozhai_Tiankeng", alex: "The World's Largest Sinkhole" },
+            { name: "Polar Bears", coords: [75.1667, 57.8333], article: "https://en.wikipedia.org/wiki/2019_mass_invasion_of_Russian_polar_bears", alex: 'Polar bears' },
+            { name: "Moray eel", coords: [-17.7134, 178.0650], article: "https://en.wikipedia.org/wiki/Giant_moray", alex: 'Moray eel' },
+            { name: "Nuclear radiation", coords: [11.6065, 165.3768], article: "https://en.wikipedia.org/wiki/Bikini_Atoll#Current_habitable_state", alex: 'Bikini Atoll' },
+            { name: "Long stringy stingy thingy", coords: [-33.1376, 81.8262], article: "https://en.wikipedia.org/wiki/Apolemia_uvaria#:~:text=Apolemia%20uvaria%2C%20commonly%20known%20as,siphonophore%20in%20the%20family%20Apolemiidae.&text=String%20jellyfish%20are%20colonial%20animals,diameter%20of%202%E2%80%935%20cm.", alex: 'Long stringy stingy thingy' },
+            { name: "Cannibals?", coords: [-7.5190, 142.1042], article: "https://en.wikipedia.org/wiki/Korowai_people#Cannibalism_claims", alex: 'Korowai' },
+            { name: "Coins big enough to crush you", coords: [9.5557, 138.1399], article: "https://en.wikipedia.org/wiki/Rai_stones", alex: 'Rai stones' },
+            { name: "Land diving", coords: [-15.3767, 166.9592], article: "https://en.wikipedia.org/wiki/Land_diving", alex: 'Land diving' },
+            { name: "Sea snake", coords: [-20.9043, 165.6180], article: "https://en.wikipedia.org/wiki/Aipysurus_duboisii", alex: 'Sea snake' },
+            { name: "Red lionfish", coords: [-13.7590, -172.1046], article: "https://en.wikipedia.org/wiki/Red_lionfish", alex: 'Red lionfish' },
+            { name: "Rising sea levels", coords: [1.4421, 172.9830], article: "https://en.wikipedia.org/wiki/Kiribati#Environmental_issues", alex: 'Rising sea levels' },
+            { name: "Sea urchin", coords: [-21.1790, -175.1982], article: "https://en.wikipedia.org/wiki/Toxopneustes_pileolus", alex: 'Sea urchin' },
+            { name: "Coconut crab", coords: [1.942, - 157.475], article: "https://en.wikipedia.org/wiki/Coconut_crab", alex: 'Coconut crab' },
+            { name: "Falling coconuts", coords: [19.8987, -155.6659], article: "https://en.wikipedia.org/wiki/Death_by_coconut", alex: 'Death by coconut' },
+            { name: "Cone snails", coords: [18.6987, -155.4659], article: "https://en.wikipedia.org/wiki/Cone_snail", alex: 'Cone snails' },
+            { name: "Great Pacific Garbage Patch", coords: [38, -150], article: "https://en.wikipedia.org/wiki/Great_Pacific_garbage_patch", alex: 'Great Pacific garbage patch' },
+            { name: "Stonefish", coords: [-17.6509, -149.4260], article: "https://en.wikipedia.org/wiki/Synanceia_verrucosa", alex: 'Stonefish' },
+            { name: "Frostbite", coords: [63.5888, -154.4931], article: "https://en.wikipedia.org/wiki/Nigel_Vardy", alex: 'Nigel Vardy' },
+            { name: "Wolf", coords: [58.6030, 49.6679], article: "https://en.wikipedia.org/wiki/Kirov_wolf_attacks", alex: 'Kirov Wolf Attacks' },
+            { name: "Grizzly bear", coords: [58.5862, -154.9698], article: "https://en.wikipedia.org/wiki/Timothy_Treadwell", alex: 'Timothy Treadwell' },
+            { name: "Falling spacecraft", coords: [-48.89, -123.39], article: "https://en.wikipedia.org/wiki/Spacecraft_cemetery", alex: 'Point Nemo' },
+            { name: "Mutineers", coords: [-24.3768, -128.3242], article: "https://en.wikipedia.org/wiki/Pitcairn_Islanders", alex: 'Mutiny on the Bounty' },
+            { name: "Moose", coords: [49.6880, -83.6670], article: "https://en.wikipedia.org/wiki/Moose#Aggression", alex: 'Moose' },
+            { name: "Coyote", coords: [36.7783, -119.4179], article: "https://en.wikipedia.org/wiki/Coyote_attack", alex: 'Coyote' },
+            { name: "Aggressive cactus", coords: [29.66667, - 110.5], article: "https://en.wikipedia.org/wiki/Cylindropuntia_fulgida", alex: 'Jumping Cholla' },
+            { name: "Skunk", coords: [28.66667, - 109.5], article: "https://en.wikipedia.org/wiki/Hooded_skunk#Behavior", alex: 'Skunk' },
+            { name: "Deforestation", coords: [-27.1127, -109.3497], article: "https://en.wikipedia.org/wiki/Easter_Island#Rapa_Nui_settlement", alex: 'Deforestation' },
+            { name: "Poison dart frog", coords: [4.5709, -74.2973], article: "https://en.wikipedia.org/wiki/Golden_poison_frog", alex: 'Poison dart frog' },
+            { name: "Zombie", coords: [18.9712, -72.2852], article: "https://en.wikipedia.org/wiki/Zombie#Haiti", alex: 'Zombie' },
+            { name: "Unhinged Killer Whale", coords: [27.6648, -81.5158], article: "https://en.wikipedia.org/wiki/Tilikum_(killer_whale)", alex: 'Tilikum' },
+            { name: "Treacherous Mountain Roads", coords: [-16.2902, -63.5887], article: "https://en.wikipedia.org/wiki/Yungas_Road#Traffic_accidents", alex: 'Yungas Road' },
+            { name: "Lightning", coords: [10.0278, -71.5769], article: "https://en.wikipedia.org/wiki/Catatumbo_lightning", alex: 'Lightning' },
+            { name: "Jaguar", coords: [4.8604, -58.9302], article: "https://en.wikipedia.org/wiki/Jaguar#Attacks_on_humans", alex: 'Jaguar' },
+            { name: "Mudslide", coords: [10.602997588, - 66.88999644], article: "https://en.wikipedia.org/wiki/Vargas_tragedy", alex: 'Vargas Tragedy' },
+            { name: "Snow blindness", coords: [69.6354163, - 42.1736914], article: "https://en.wikipedia.org/wiki/Photokeratitis", alex: 'Snow blindness' },
+            { name: "Killer Bee", coords: [-8.2400732, - 48.1805017], article: "https://en.wikipedia.org/wiki/Africanized_bee#Defensiveness", alex: 'Africanized bee' },
+            { name: "Electric eel", coords: [3.9232946, - 56.0246345], article: "https://en.wikipedia.org/wiki/Electric_eel#Physiology", alex: 'Electric eel' },
+            { name: "Guiana Rattlesnake", coords: [3.9332383, - 53.0875742], article: "https://en.wikipedia.org/wiki/Crotalus_durissus", alex: 'Rattlesnake' },
+            { name: "Walrus", coords: [65.6354163, - 39.1736914], article: "https://en.wikipedia.org/wiki/Walrus_attack", alex: 'Walrus' },
+            { name: "Piranha", coords: [-38.4192641, - 63.5989206], article: "https://en.wikipedia.org/wiki/Piranha#Attacks", alex: 'Piranha' },
+            { name: "Bird-Eating Tarantula", coords: [2.1632955, - 69.4146705], article: "https://en.wikipedia.org/wiki/Goliath_birdeater", alex: 'Goliath birdeater' },
+            { name: "Icebergs", coords: [41.7666636, - 50.2333324], article: "https://en.wikipedia.org/wiki/Wreck_of_the_Titanic", alex: 'Wreck of the Titanic' },
+            { name: "Hurricanes", coords: [14.521997912, - 75.817663396], article: "https://en.wikipedia.org/wiki/Hurricane_Alley", alex: 'Hurricane Alley' },
+            { name: "Coastal Erosion", coords: [52.95, 0.5], article: "https://en.wikipedia.org/wiki/Coastal_erosion", alex: 'Erosion' },
+            { name: "Malaria", coords: [12.2395, - 1.5584094], article: "https://en.wikipedia.org/wiki/Malaria", alex: 'Malaria' },
+            { name: "Unhinged Zoo Gorilla", coords: [52.2129919, 5.2793703], article: "https://en.wikipedia.org/wiki/Bokito_(gorilla)", alex: 'Bokito' },
+            { name: "Hippopotamus", coords: [17.5968801, 8.0828506], article: "https://en.wikipedia.org/wiki/Hippopotamus#Attacks_on_humans", alex: 'Hippopotamus' },
+            { name: "Drought", coords: [-24.967062, 18.4929993], article: "https://en.wikipedia.org/wiki/2018%E2%80%932021_Southern_African_drought", alex: 'Drought' },
+            { name: "Rhinoceros", coords: [-28.4792625, 24.6727135], article: "https://en.wikipedia.org/wiki/Black_rhinoceros#Behavior", alex: 'Rhinoceros' },
+            { name: "Hyena", coords: [-13.2512161, 34.3015278], article: "https://en.wikipedia.org/wiki/Hyena#Attacks_on_humans", alex: 'Hyena' },
+            { name: "Shark", coords: [-30.57249771, 30.57249771], article: "https://en.wikipedia.org/wiki/Black_December", alex: 'Black December' },
+            { name: "Nuclear Meltdown", coords: [48.383022, 31.1828699], article: "https://en.wikipedia.org/wiki/Chernobyl_disaster", alex: 'Chernobyl disaster' },
+            {
+                name: "Widowmaker buffalo", coords: [1.3707295, 32.3032414], article: "https://en.wikipedia.org/wiki/African_buffalo#Attacks", alex: 'African buffalo'
+            },
+            { name: "Hail", coords: [-0.36774, 35.28314], article: "https://en.wikipedia.org/wiki/Hail#Hail_records", alex: 'Hail' },
+            { name: "Hypothermia", coords: [55.75222, 37.61556], article: "https://en.wikipedia.org/wiki/Hypothermia#History", alex: 'Hypothermia' },
+            { name: "Deathstalker Scorpion", coords: [24.266906, 45.107849], article: "https://en.wikipedia.org/wiki/Deathstalker", alex: 'Scorpion' },
+            { name: "Lion", coords: [-2.1833333, 38.4166667], article: "https://en.wikipedia.org/wiki/Tsavo_Man-Eaters", alex: 'Tsavo Man Eaters' },
+            { name: "Blizzard", coords: [32.4207423, 53.6830157], article: "https://en.wikipedia.org/wiki/1972_Iran_blizzard", alex: 'Blizzard' },
+            { name: "Leopard", coords: [22.6708, 71.5724], article: "https://en.wikipedia.org/wiki/Leopard_attack", alex: 'Leopard' },
+            { name: "Elephant", coords: [18.5937, 78.9629], article: "https://en.wikipedia.org/wiki/Elephant#Attacks", alex: 'Elephant' },
+            { name: "Tiger", coords: [25.76, 88.71], article: "https://en.wikipedia.org/wiki/Champawat_Tiger", alex: 'Champawat Tiger' },
+            { name: "Dust storm", coords: [35.69439, 51.42151], article: "https://en.wikipedia.org/wiki/2014_Tehran_dust_storm", alex: 'Dust storm' },
+            { name: "Altitude sickness", coords: [27.9881, 86.9250], article: "https://en.wikipedia.org/wiki/Altitude_sickness", alex: 'Altitude sickness' },
+            { name: "Flood", coords: [23.6943117, 90.344352], article: "https://en.wikipedia.org/wiki/Floods_in_Bangladesh", alex: 'Flood' },
+            { name: "Cobra", coords: [19.0734647, 96.6710399], article: "https://en.wikipedia.org/wiki/King_cobra#Cultural_significance", alex: 'Cobra' },
+            { name: "Red Crab migration", coords: [-10.4912311, 105.6229817], article: "https://en.wikipedia.org/wiki/Christmas_Island_red_crab#Relationship_with_humans", alex: 'Red Crab Migration' },
+            { name: "Typhoon", coords: [11.6978352, 122.6217542], article: "https://en.wikipedia.org/wiki/Typhoons_in_the_Philippines", alex: 'Typhoon' },
+            { name: "Yak-Killing Wasp", coords: [30.5723, 104.0665], article: "https://en.wikipedia.org/wiki/Asian_giant_hornet#Effects_on_humans", alex: 'Asian Giant Hornet' },
+            { name: "Desertification", coords: [48.0, 107.0], article: "https://en.wikipedia.org/wiki/Gobi_Desert#Desertification", alex: 'Desertification' },
+            { name: "Volcano", coords: [-7.95, 112.95], article: "https://en.wikipedia.org/wiki/Volcanism_of_Indonesia", alex: 'Volcano' },
+            {
+                name: "Man-eating python", coords: [-2.1333328, 120.2833322], article: "https://en.wikipedia.org/wiki/Reticulated_python#Danger_to_humans", alex: 'Reticulated python'
+            },
+            { name: "Tsunami", coords: [36.5048, 138.2529], article: "https://en.wikipedia.org/wiki/Tsunami#Mitigation", alex: 'Tsunami' },
+            { name: "Earthquake", coords: [34.2048, 135.2529], article: "https://en.wikipedia.org/wiki/List_of_earthquakes_in_Japan", alex: 'Earthquake' },
+            { name: "Cassowary", coords: [-6.2645902, 143.9638467], article: "https://en.wikipedia.org/wiki/Cassowary#Attacks", alex: 'Cassowary' },
+            { name: "volcanic spring", coords: [-38.3590, 176.3690], article: "https://en.wikipedia.org/wiki/Champagne_Pool", alex: 'Champagne Pool' },
+            {
+                name: "suffocating lake", coords: [6.4378, 10.2979], article: "https://en.wikipedia.org/wiki/Lake_Nyos_disaster", alex: 'Limnic eruption'
+            },
+            { name: "Jellyfish", coords: [-18.2871, 147.6992], article: "https://en.wikipedia.org/wiki/Irukandji_jellyfish#Irukandji_syndrome", alex: 'Jellyfish' },
+            { name: "Venomous Platypus", coords: [-42.0409, 146.8087], article: "https://en.wikipedia.org/wiki/Platypus_venom#Effect_on_humans_and_other_animals", alex: 'Platypus' },
+            {
+                name: "Rain of Fish", coords: [15.1370, -87.1273], article: "https://en.wikipedia.org/wiki/Lluvia_de_peces", alex: 'Rain of Fish'
+            }
+        ];
+
+        // Grouping markers by hemisphere
+        var westernMarkers = L.layerGroup();
+        var easternMarkers = L.layerGroup();
+
+        // Add markers to the respective groups
+        locations.forEach(function (location, index) {
+            var icon = L.divIcon({
+                className: 'numbered-icon',
+                html: '<div class="signpost">' + (location.name) + '</div>',
+                iconSize: [100, 30],
+                iconAnchor: [40, 35]
+            });
+
+            var marker = L.marker(location.coords, { icon: icon }).addTo(map);
+            marker.bindPopup("<b>" + location.name + "</b><br><a href='" + location.article + "'>" + location.alex + "</a>");
+
+            if (location.coords[1] >= 0) {
+                easternMarkers.addLayer(marker);
+            } else {
+                westernMarkers.addLayer(marker);
+            }
+        });
+
+        // Add the markers to the map initially
+        westernMarkers.addTo(map);
+
+        map.on('moveend', function () {
+            var center = map.getCenter();
+
+            if (center.lng > 0) {
+                // Switch to Eastern Hemisphere markers
+                map.removeLayer(westernMarkers);
+                map.addLayer(easternMarkers);
+            } else {
+                // Switch to Western Hemisphere markers
+                map.removeLayer(easternMarkers);
+                map.addLayer(westernMarkers);
+            }
+        });
+    </script>
+</body>
+
+</html>
